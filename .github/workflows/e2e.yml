@@ -9,7 +9,7 @@ on:  # yamllint disable-line rule:truthy
     workflows:
       - validation
     branches:
-      - main
+      - pflt-e2e-review
     types:
       - completed
   workflow_dispatch:

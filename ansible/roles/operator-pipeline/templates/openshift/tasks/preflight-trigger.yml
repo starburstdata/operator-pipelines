@@ -163,7 +163,10 @@ spec:
           PROWJOB_ID=${PROWJOB_URL##*/}
           ARTIFACTS_TARBALL_URI="${BASE_URL}periodic-ci-redhat-openshift-ecosystem-preflight-ocp-${OCP_VER}-preflight-common-${JOB_SUFFIX}/${PROWJOB_ID}/artifacts/preflight-common-${JOB_SUFFIX}/operator-pipelines-preflight-common-encrypt/artifacts/preflight.tar.gz.asc"
 
+          echo "Print artifacts URI built, download artifacts, list directory contents"
+          echo "${ARTIFACTS_TARBALL_URI}"
           curl -sLO "${ARTIFACTS_TARBALL_URI}"
+          ls -lha
 
           gpg -q --import "${PIPELINE_GPG_DECRYPTION_PRIVATE_KEY}" 1> /dev/null
           echo "$(gpg --list-keys|grep -B1 'Operator Pipelines'|awk 'NR==1 { print }'|tr -d '[:space:]')":6: | gpg --import-ownertrust 1> /dev/null
