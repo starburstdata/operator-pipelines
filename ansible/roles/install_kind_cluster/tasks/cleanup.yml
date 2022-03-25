@@ -1,5 +1,0 @@
----
-- name: "Delete kind cluster '{{ kind_cluster_name }}'"
-  command: "{{ kind_binary }} delete cluster --name {{ kind_cluster_name }}"
-  changed_when: true
-  # failed_when: false

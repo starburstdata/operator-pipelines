@@ -1,0 +1,25 @@
+---
+- name: "Check '{{ kind_binary }}' version"
+  ansible.builtin.command: "{{ kind_binary }} version"
+  register: kind_version_result
+  changed_when: false
+  failed_when: false
+
+- name: "Install kubectl ({{ kind_version }})"
+  block:
+    - name: "Remove previous {{ kind_binary }}"
+      ansible.builtin.file:
+        path: "{{ op_bin_dir }}/{{ kind_binary }}"
+        state: absent
+
+    - name: "Install kubectl ({{ kind_version }})"
+      ansible.builtin.get_url:
+        url: https://github.com/kubernetes-sigs/kind/releases/download/{{ kind_version }}/kind-linux-amd64
+        dest: "{{ op_bin_dir }}/{{ kind_binary }}"
+        mode: "0755"
+      register: kubectl_install_result
+      until: kubectl_install_result.status_code is undefined or kubectl_install_result.status_code == 200
+      retries: "{{ op_retries }}"
+      delay: "{{ op_delay }}"
+      failed_when: kubectl_install_result is failure
+  when: kind_version_result.rc is undefined or kind_version_result.rc != 0 or kind_version_result.stdout_lines[0].split(' ')[1] != kind_version

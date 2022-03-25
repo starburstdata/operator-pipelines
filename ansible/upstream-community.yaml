@@ -6,6 +6,7 @@
     op_work_dir: "{{ ansible_env.HOME }}/.op"
     op_bin_dir: "{{ op_work_dir }}/bin"
     registry_cert_dir: "{{ op_work_dir }}/certs"
+    run_cleanup: false
 
   environment:
     # User has to do 'export SSL_CERT_DIR=$HOME/.op/certs' when running in rootless mode
@@ -15,4 +16,3 @@
   roles:
     - { role: base }
     - { role: install_kind_cluster }
-
