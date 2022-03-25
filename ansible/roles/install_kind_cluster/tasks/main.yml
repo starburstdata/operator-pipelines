@@ -12,11 +12,11 @@
         - directory
 
     - name: "Set initial 'kind_cluster_install_retry'"
-      ansible.builtin.set_fact:
+      set_fact:
         kind_cluster_install_retry: 1
 
     - name: "Install cluster '{{ kind_cluster_name }}'"
-      ansible.builtin.include_tasks: install.yml
+      include_tasks: install.yml
 
   tags:
     - always

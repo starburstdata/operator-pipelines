@@ -16,7 +16,7 @@
     - directory
 
 - name: "Load config '{{ oc_config_file }}'"
-  ansible.builtin.include_role:
+  include_role:
     name: include_vars
   vars:
     var_name: uc_config
@@ -25,7 +25,7 @@
     var_verbose: true
 
 - name: "Setting variables from config 'uc_config'"
-  ansible.builtin.set_fact:
+  set_fact:
     kind_version: "{{ uc_config.kind.version | default(kind_version) }}"
     kind_kube_version: "{{ uc_config.kind.kube_version | default(kind_kube_version) }}"
     registry_enable: "{{ uc_config.registry.enable | default(registry_enable) }}"
