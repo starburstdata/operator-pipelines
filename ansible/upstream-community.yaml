@@ -14,5 +14,23 @@
     PATH: "{{ op_bin_dir }}:{{ ansible_env.PATH }}"
 
   roles:
-    - { role: base }
-    - { role: install_kind_cluster }
+    - { role: base, tags: [always] }
+
+  tasks:
+    - name: "Install prerequisite"
+      include_role:
+        name: install_prerequisite
+      when: install_prerequisite is undefined or install_prerequisite|bool
+      tags:
+        - clean
+        - install
+        - verify
+
+    - name: "Install kind cluster"
+      include_role:
+        name: install_kind_cluster
+      when: install_kind_cluster is undefined or install_kind_cluster|bool
+      tags:
+        - clean
+        - install
+        - verify

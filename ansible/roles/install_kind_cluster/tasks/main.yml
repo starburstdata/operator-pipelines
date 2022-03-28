@@ -1,17 +1,31 @@
 ---
-- name: "Ensure that the '{{ ikc_tmp_dir }}' directory exists and is empty"
-  ansible.builtin.file:
-    state: "{{ item }}"
-    path: "{{ ikc_tmp_dir }}"
-    mode: "755"
-  with_items:
-    - absent
-    - directory
+- name: "Install kind cluster"
+  block:
+    - name: "Ensure that the '{{ ikc_tmp_dir }}' directory exists and is empty"
+      ansible.builtin.file:
+        state: "{{ item }}"
+        path: "{{ ikc_tmp_dir }}"
+        mode: "755"
+      with_items:
+        - absent
+        - directory
 
-- name: "Set initial 'kind_cluster_install_retry'"
-  ansible.builtin.set_fact:
-    kind_cluster_install_retry: 1
+    - name: "Set initial 'kind_cluster_install_retry'"
+      ansible.builtin.set_fact:
+        kind_cluster_install_retry: 1
 
-- name: "Install cluster '{{ kind_cluster_name }}'"
-  ansible.builtin.include_tasks:
-    file: install.yml
+    - name: "Install cluster '{{ kind_cluster_name }}'"
+      ansible.builtin.include_tasks:
+        file: install.yml
+
+  tags:
+    - install
+
+- name: "Verify kind cluster"
+  block:
+    - name: "Test debug"
+      ansible.builtin.debug:
+        msg: "Verifying cluster '{{ kind_cluster_name }}'"
+
+  tags:
+    - verify

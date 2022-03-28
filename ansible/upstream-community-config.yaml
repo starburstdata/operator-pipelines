@@ -6,7 +6,7 @@ registry:
   ssl: true
 tools:
   kubectl:
-    version: latest
+    version: v1.23.4
   oc:
     version: 4.3.5
   operator_sdk: 

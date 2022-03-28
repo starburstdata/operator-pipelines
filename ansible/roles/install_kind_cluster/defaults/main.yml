@@ -19,7 +19,7 @@ registry_port: 5000
 registry_ssl: false
 registry_cert_dir: "{{ op_work_dir }}/certs"
 kubectl_binary: kubectl
-kubectl_version: latest
+kubectl_version: v1.23.5
 oc_binary: oc
 oc_version: 4.3.5
 operator_sdk_binary: operator-sdk

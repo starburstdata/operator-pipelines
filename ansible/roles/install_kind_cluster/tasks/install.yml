@@ -1,11 +1,6 @@
 ---
 - name: "Install kind cluster '{{ kind_cluster_name }}' (Wait until success)"
   block:
-
-    - name: "Install kind"
-      ansible.builtin.include_tasks:
-        file: install_kind.yml
-
     - name: "Install core kind cluster '{{ kind_cluster_name }}'"
       ansible.builtin.include_tasks:
         file: install_kind_cluster.yml
@@ -15,22 +10,9 @@
         file: install_registry.yml
       when: registry_enable|bool
 
-    - name: "Install operator-sdk"
-      ansible.builtin.include_tasks:
-        file: install_operator_sdk.yml
-
     - name: "Install olm"
       ansible.builtin.include_tasks:
         file: install_olm.yml
-
-    - name: "Install oc"
-      ansible.builtin.include_tasks:
-        file: install_oc.yml
-
-    - name: "Install kubectl"
-      ansible.builtin.include_tasks:
-        file: install_kubectl.yml
-
   rescue:
     - name: "Fail after {{ kund_cluster_install_retries }} retries"
       ansible.builtin.fail:
