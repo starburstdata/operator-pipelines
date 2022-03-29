@@ -9,17 +9,24 @@
       with_items:
         - absent
         - directory
+      tags:
+        - clean
+        - install
 
     - name: "Set initial 'kind_cluster_install_retry'"
       ansible.builtin.set_fact:
         kind_cluster_install_retry: 1
+      tags:
+        - clean
+        - install
 
     - name: "Install cluster '{{ kind_cluster_name }}'"
       ansible.builtin.include_tasks:
         file: install.yml
-
-  tags:
-    - install
+      tags:
+        - kind_delete
+        - clean
+        - install
 
 - name: "Verify kind cluster"
   block:
@@ -27,9 +34,9 @@
       ansible.builtin.debug:
         msg: "Verifying cluster '{{ kind_cluster_name }}'"
 
-    - name: "Install tekton"
-      ansible.builtin.include_tasks:
-        file: install_tekton.yml
+    # - name: "Install tekton"
+    #   ansible.builtin.include_tasks:
+    #     file: install_tekton.yml
 
   tags:
     - verify

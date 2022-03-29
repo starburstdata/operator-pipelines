@@ -1,21 +1,25 @@
 ---
+- name: "Remove previous registry '{{ registry_name }}'"
+  ansible.builtin.command: "{{ container_tool }} rm -f {{ registry_name }}"
+  failed_when: false
+  changed_when: true
+  tags:
+    - clean
+    - install
+
 - name: "Install registry '{{ registry_name }}'"
   block:
     - name: "Ensure that the '{{ registry_cert_dir }}' directory exists and is empty"
       ansible.builtin.file:
         state: "{{ item }}"
         path: "{{ registry_cert_dir }}"
+        mode: "0755"
       with_items:
         - absent
         - directory
 
     - name: "Generate certificate in to '{{ registry_cert_dir }}'"
       ansible.builtin.command: 'openssl req -newkey rsa:4096 -nodes -sha256 -keyout {{ registry_cert_dir }}/domain.key -x509 -days 365 -subj ''/CN=${reg_name}'' -addext "subjectAltName=DNS:{{ registry_hostname }},DNS:{{ registry_host }},DNS:localhost,DNS:host.containers.internal" -out {{ registry_cert_dir }}/domain.crt -batch'
-      failed_when: false
-      changed_when: true
-
-    - name: "Remove previous registry '{{ registry_name }}'"
-      ansible.builtin.command: "{{ container_tool }} rm -f {{ registry_name }}"
       failed_when: false
       changed_when: true
 
@@ -58,3 +62,5 @@
       kubernetes.core.k8s:
         state: present
         src: "{{ kind_config_map_registry_path }}"
+  tags:
+    - install

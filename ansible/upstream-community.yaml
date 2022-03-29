@@ -34,3 +34,9 @@
         - clean
         - install
         - verify
+
+    - name: "Delete kind cluster"
+      include_role:
+        name: install_kind_cluster
+      tags:
+        - kind_delete
