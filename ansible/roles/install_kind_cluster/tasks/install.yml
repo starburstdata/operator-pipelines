@@ -13,6 +13,7 @@
     - name: "Install olm"
       ansible.builtin.include_tasks:
         file: install_olm.yml
+
   rescue:
     - name: "Fail after {{ kund_cluster_install_retries }} retries"
       ansible.builtin.fail:
