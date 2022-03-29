@@ -7,24 +7,24 @@
       changed_when: false
       failed_when: false
 
-    - name: "Resets 'package_needs_install'"
+    - name: "Resets 'binary_needs_install'"
       ansible.builtin.set_fact:
-        package_needs_install: false
-        package_current_version: ""
+        binary_needs_install: false
+        binary_current_version: ""
 
-    - name: "Resets 'package_needs_install' and 'package_current_version'"
+    - name: "Resets 'binary_needs_install' and 'binary_current_version'"
       ansible.builtin.set_fact:
-        package_current_version: "{{ package_version_result.stdout_lines[0].split(package_parse_delimeter)[package_parse_index] | default('') }}"
+        binary_current_version: "{{ package_version_result.stdout_lines[0].split(package_parse_delimeter)[package_parse_index] | default('') }}"
       when: package_version_result.stdout_lines.0 is defined
 
-    - name: "Sets 'package_current_version'"
+    - name: "Sets 'binary_current_version'"
       ansible.builtin.set_fact:
-        package_needs_install: true
-      when: package_version_result.rc is undefined or not package_version_result.rc in package_version_rcs or package_current_version != package_version
+        binary_needs_install: true
+      when: package_version_result.rc is undefined or not package_version_result.rc in package_version_rcs or binary_current_version != package_version
 
     - name: "Print package info message"
       ansible.builtin.debug:
-        msg: "{{ package_binary }} current={{ package_current_version }} request={{ package_version }} ok={{ not package_needs_install|bool }}"
+        msg: "{{ package_binary }} current={{ binary_current_version }} request={{ package_version }} ok={{ not binary_needs_install|bool }}"
       when: package_verify_msg is undefined or package_verify_msg|bool
 
   tags:

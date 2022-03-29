@@ -1,6 +1,6 @@
 ---
 
-- name: Download metrics-server manifest to the cluster.
+- name: "Download tekton '{{ tekton_version }}' release.yaml"
   ansible.builtin.get_url:
     url: "https://storage.googleapis.com/tekton-releases/operator/previous/{{ tekton_version }}/release.yaml"
     dest: "{{ kind_tekton_path }}"

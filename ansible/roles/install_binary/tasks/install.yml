@@ -37,7 +37,7 @@
           delay: "{{ op_delay }}"
           when: package_extract|bool
 
-      when: package_needs_install|bool
+      when: binary_needs_install|bool
 
   tags:
     - install
