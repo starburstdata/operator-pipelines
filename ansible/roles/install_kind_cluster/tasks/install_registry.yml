@@ -46,8 +46,8 @@
       ansible.builtin.set_fact:
         ikc_kind_nodes: "{{ ikc_kind_nodes_result.stdout.split('\n') }}"
 
-    - name: "Update ca certificate on nodes"
-      ansible.builtin.include_tasks: kind_node_cert.yml
+    - name: "Apply changes on kind nodes"
+      ansible.builtin.include_tasks: kind_node_changes.yml
       loop: "{{ ikc_kind_nodes }}"
       loop_control:
         loop_var: node_item

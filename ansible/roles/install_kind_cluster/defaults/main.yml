@@ -32,3 +32,5 @@ olm_version: v0.20.0
 tekton_pipeline_version: v0.34.1
 tekton_triggers_version: v0.19.1
 tekton_dashboard_version: v0.24.1
+kind_verify_index_image: quay.io/operatorhubio/catalog_tmp:latest
+kind_verify_index_image_local: localhost:5000/operatorhubio/catalog_tmp:latest

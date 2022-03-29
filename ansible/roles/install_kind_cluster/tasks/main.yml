@@ -34,9 +34,41 @@
       ansible.builtin.debug:
         msg: "Verifying cluster '{{ kind_cluster_name }}'"
 
-    # - name: "Install tekton"
-    #   ansible.builtin.include_tasks:
-    #     file: install_tekton.yml
+    - name: "Get kind cluster information"
+      kubernetes.core.k8s_cluster_info:
+      register: api_status
 
+    - name: "Failing when cluster is not running"
+      ansible.builtin.fail:
+        msg: "Kind cluster is not running !!!"
+      when: api_status.failed is undefined or api_status.failed|bool
+
+    - name: "Pull index image '{{ kind_verify_index_image }}'"
+      ansible.builtin.command: "{{ container_tool }} pull {{ kind_verify_index_image }}"
+      changed_when: true
+
+    - name: "Retag index image '{{ kind_verify_index_image }}' to '{{ kind_verify_index_image_local }}'"
+      ansible.builtin.command: "{{ container_tool }} tag {{ kind_verify_index_image }} {{ kind_verify_index_image_local }}"
+      changed_when: true
+
+    - name: "Push index image to '{{ kind_verify_index_image_local }}'"
+      ansible.builtin.command: "{{ container_tool }} push {{ kind_verify_index_image_local }}"
+      changed_when: true
+
+    - name: "Start index image in kind cluster via '{{ kind_verify_index_image_local }}'"
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: index
+            namespace: default
+          spec:
+            containers:
+              - name: index-local
+                image: "{{ kind_verify_index_image_local }}"
+                ports:
+                  - containerPort: 50051
   tags:
     - verify
