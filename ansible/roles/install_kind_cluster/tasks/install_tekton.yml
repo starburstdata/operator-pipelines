@@ -1,0 +1,46 @@
+---
+
+- name: Download metrics-server manifest to the cluster.
+  ansible.builtin.get_url:
+    url: "https://storage.googleapis.com/tekton-releases/operator/previous/{{ tekton_version }}/release.yaml"
+    dest: "{{ kind_tekton_path }}"
+    mode: '0664'
+
+# - name: "Install tekton {{ tekton_version }}"
+#   kubernetes.core.k8s:
+#     state: absent
+#     src: "{{ kind_tekton_path }}"
+
+- name: "Install tekton {{ tekton_version }}"
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ kind_tekton_path }}"
+
+
+- name: "Wait till the Object is created"
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    wait: true
+    name: tekton-triggers-webhook
+    namespace: tekton-pipelines
+    wait_sleep: 1
+    wait_timeout: 360
+
+
+# - name: "Wait till the Object is created"
+#   kubernetes.core.k8s_info:
+#     kind: Deployment
+#     wait: true
+#     wait_condition: 
+#     # name: tekton-pipelines-controller
+#     namespace: tekton-pipelines
+#     wait_sleep: 1
+#     wait_timeout: 360
+
+
+# - name: "Rollback tekton deployment"
+#   kubernetes.core.k8s_rollback:
+#     api_version: apps/v1
+#     kind: Deployment
+#     name: web
+#     namespace: testing

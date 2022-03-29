@@ -12,6 +12,7 @@ kind_cluster_name: "test"
 kund_cluster_install_retries: 1
 kind_config_path: "{{ ikc_tmp_dir }}/kind_config.yaml"
 kind_config_map_registry_path: "{{ ikc_tmp_dir }}/kind_config_map_registry.yaml"
+kind_tekton_path: "{{ ikc_tmp_dir }}/kind_tekton.yaml"
 registry_enable: false
 registry_name: kind-registry
 registry_host: kind-registry
@@ -25,3 +26,4 @@ oc_version: 4.3.5
 operator_sdk_binary: operator-sdk
 operator_sdk_version: v1.18.1
 olm_version: v0.20.0
+tekton_version: v0.55.1

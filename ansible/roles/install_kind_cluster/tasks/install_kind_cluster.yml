@@ -12,3 +12,12 @@
 - name: "Create kind cluster '{{ kind_cluster_name }}'"
   ansible.builtin.command: "{{ kind_binary }} create cluster --name {{ kind_cluster_name }} --image kindest/node:{{ kind_kube_version }} --config={{ kind_config_path }}"
   changed_when: true
+
+- name: "Get kind cluster information"
+  kubernetes.core.k8s_cluster_info:
+  register: api_status
+
+- name: "Failing when cluster failed to start"
+  ansible.builtin.fail:
+    msg: "Kind cluster was not able to start !!!"
+  when: api_status.failed is undefined or api_status.failed|bool

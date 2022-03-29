@@ -27,5 +27,9 @@
       ansible.builtin.debug:
         msg: "Verifying cluster '{{ kind_cluster_name }}'"
 
+    - name: "Install tekton"
+      ansible.builtin.include_tasks:
+        file: install_tekton.yml
+
   tags:
     - verify

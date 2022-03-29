@@ -14,6 +14,10 @@
       ansible.builtin.include_tasks:
         file: install_olm.yml
 
+    # - name: "Install tekton"
+    #   ansible.builtin.include_tasks:
+    #     file: install_tekton.yml
+
   rescue:
     - name: "Fail after {{ kund_cluster_install_retries }} retries"
       ansible.builtin.fail:

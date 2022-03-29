@@ -1,7 +1,7 @@
 ---
 - name: "Install kind"
   ansible.builtin.include_role:
-    name: install_package
+    name: install_binary
   vars:
     package_binary: "kind"
     package_version: "{{ kind_version }}"
@@ -15,7 +15,7 @@
 
 - name: "Install oc"
   ansible.builtin.include_role:
-    name: install_package
+    name: install_binary
   vars:
     package_binary: "oc"
     package_version: "{{ oc_version }}"
@@ -32,7 +32,7 @@
 
 - name: "Install kubectl"
   ansible.builtin.include_role:
-    name: install_package
+    name: install_binary
   vars:
     package_binary: "kubectl"
     package_version: "{{ kubectl_version }}"
@@ -47,7 +47,7 @@
 
 - name: "Install operator-sdk"
   ansible.builtin.include_role:
-    name: install_package
+    name: install_binary
   vars:
     package_binary: "operator-sdk"
     package_version: "{{ operator_sdk_version }}"
