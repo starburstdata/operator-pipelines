@@ -1,9 +1,10 @@
 ---
-- name: "Remove previous registry '{{ registry_name }}'"
+- name: "Remove registry '{{ registry_name }}'"
   ansible.builtin.command: "{{ container_tool }} rm -f {{ registry_name }}"
   failed_when: false
   changed_when: true
   tags:
+    - kind_delete
     - clean
     - install
 
