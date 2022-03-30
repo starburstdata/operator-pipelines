@@ -22,9 +22,9 @@ $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
-  --tags install \
   -e prerequisites=true \ 
-  -e kind_cluster=true
+  -e kind_cluster=true \
+  --tags install
 ```
 
 ### Verify installation
@@ -33,9 +33,9 @@ $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
-  --tags verify \
   -e prerequisites=true \ 
-  -e kind_cluster=true
+  -e kind_cluster=true \
+  --tags verify 
 ```
 
 ### Cleanup kind cluster
@@ -45,9 +45,9 @@ $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
-  --tags clean \
   -e prerequisites=false \
-  -e kind_cluster=true
+  -e kind_cluster=true \
+  --tags clean 
 ```
 
 ### Uninstall everything (prerequisites and Kind cluster)
@@ -56,9 +56,9 @@ $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
-  --tags clean \
   -e prerequisites=true \
-  -e kind_cluster=true
+  -e kind_cluster=true \
+  --tags clean 
 ```
 
 ### Destroy KIND cluster
@@ -77,7 +77,7 @@ $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
-  --tags install \
   -e prerequisites=true \ 
-  -e kind_cluster=false
+  -e kind_cluster=false \
+  --tags install
 ```
