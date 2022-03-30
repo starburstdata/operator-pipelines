@@ -10,8 +10,8 @@ $ pip3 install ansible
 ```
 Then one has to install additional `ansible` collection `kubernetes.core` and its dependency python `kubernetes` package
 ```
-$ ansible-galaxy collection install kubernetes.core
 $ pip3 install kubernetes
+$ ansible-galaxy collection install kubernetes.core
 ```
 
 ## Kind Cluster Instllation
@@ -57,7 +57,7 @@ $ ansible-pull ansible/upstream-community.yaml \
   -C upstream-community-dev  \
   -i localhost, \
   --tags clean \
-  -e prerequisite=true
+  -e prerequisite=true \
   -e kind_cluster=true
 ```
 
