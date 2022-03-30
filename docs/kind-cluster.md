@@ -3,7 +3,7 @@
 The testing pipeline is running in local kind cluster with registry and its dependencies like OLM, Tekton and others. The following steps must be performed
 to prepare the kind clusters for use by the pipeline. 
 
-## Prerequisites
+## prerequisitess
 The KIND Cluster Setup is done by `ansible`. One can to install `ansible` via 
 ```
 $ pip3 install ansible
@@ -23,7 +23,7 @@ $ ansible-pull ansible/upstream-community.yaml \
   -C upstream-community-dev  \
   -i localhost, \
   --tags install \
-  -e prerequisite=true \ 
+  -e prerequisites=true \ 
   -e kind_cluster=true
 ```
 
@@ -34,7 +34,7 @@ $ ansible-pull ansible/upstream-community.yaml \
   -C upstream-community-dev  \
   -i localhost, \
   --tags verify \
-  -e prerequisite=true \ 
+  -e prerequisites=true \ 
   -e kind_cluster=true
 ```
 
@@ -46,18 +46,18 @@ $ ansible-pull ansible/upstream-community.yaml \
   -C upstream-community-dev  \
   -i localhost, \
   --tags clean \
-  -e prerequisite=false \
+  -e prerequisites=false \
   -e kind_cluster=true
 ```
 
-### Uninstall everything (prerequisite and Kind cluster)
+### Uninstall everything (prerequisites and Kind cluster)
 ```
 $ ansible-pull ansible/upstream-community.yaml \
   -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
   -C upstream-community-dev  \
   -i localhost, \
   --tags clean \
-  -e prerequisite=true \
+  -e prerequisites=true \
   -e kind_cluster=true
 ```
 
@@ -69,4 +69,15 @@ $ ansible-pull ansible/upstream-community.yaml \
   -C upstream-community-dev  \
   -i localhost, \
   --tags kind_delete
+```
+
+### Upgrade prerequisites/tools installation
+```
+$ ansible-pull ansible/upstream-community.yaml \
+  -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
+  -C upstream-community-dev  \
+  -i localhost, \
+  --tags install \
+  -e prerequisites=true \ 
+  -e kind_cluster=false
 ```
