@@ -81,3 +81,14 @@ $ ansible-pull ansible/upstream-community.yaml \
   -e kind_cluster=false \
   --tags install
 ```
+
+## Operator pipeline tekton tasks and pipelines
+
+```
+$ ansible-pull ansible/upstream-community.yaml \
+  -U https://github.com/redhat-openshift-ecosystem/operator-pipelines.git \
+  -C upstream-community-dev  \
+  -i localhost, \
+  --tags tekton-task,tekton-pipeline
+```
+

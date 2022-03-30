@@ -7,6 +7,7 @@
     op_bin_dir: "{{ op_work_dir }}/bin"
     registry_cert_dir: "{{ op_work_dir }}/certs"
     run_cleanup: false
+    oc_namespace: default
 
   environment:
     # User has to do 'export SSL_CERT_DIR=$HOME/.op/certs' when running in rootless mode
@@ -35,9 +36,19 @@
         - install
         - verify
 
+    - name: "Install operator pipeline"
+      include_role:
+        name: operator-pipeline
+      # when: operator-pipeline is defined and operator-pipeline|bool
+      tags:
+        - tekton-task
+        - tekton-pipeline
+
     - name: "Delete kind cluster"
       include_role:
         name: install_kind_cluster
       tags:
         - never
         - kind_delete
+
+        
