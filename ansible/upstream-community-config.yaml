@@ -11,7 +11,8 @@ tekton:
     version: v0.19.1
   dashboard:
     version: v0.24.1
-
+  tkn:
+    version: 0.23.1
 tools:
   kubectl:
     version: v1.23.4

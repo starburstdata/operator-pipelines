@@ -58,18 +58,20 @@
     - clean
     - install
     - verify
-# - name: "Install kind"
-#   ansible.builtin.include_role:
-#     name: install_kind
-#   tags:
-#     - clean
-#     - install
-#     - verify
 
-# - name: "Install kubectl"
-#   ansible.builtin.include_role:
-#     name: install_kubectl
-#   tags:
-#     - clean
-#     - install
-#     - verify
+- name: "Install tkn"
+  ansible.builtin.include_role:
+    name: install_binary
+  vars:
+    package_binary: "tkn"
+    package_version: "{{ tkn_version }}"
+    package_url: "https://github.com/tektoncd/cli/releases/download/v{{ package_version }}/tkn_{{ package_version }}_Linux_x86_64.tar.gz"
+    package_parse_delimeter: " "
+    package_parse_index: 2
+    package_extract: true
+    package_extract_exclude: ["LICENSE", "README.md"]
+    package_version_rcs: [0, 1]
+  tags:
+    - clean
+    - install
+    - verify

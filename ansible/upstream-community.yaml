@@ -20,7 +20,7 @@
     - name: "Install prerequisite"
       include_role:
         name: install_prerequisite
-      when: prerequisites is undefined or prerequisites|bool
+      when: prerequisites is defined or prerequisites|bool
       tags:
         - clean
         - install

@@ -55,9 +55,24 @@
       ansible.builtin.command: "{{ container_tool }} push {{ kind_verify_index_image_local }}"
       changed_when: true
 
+
+    - name: "Delete prvious index pod"
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Pod
+        namespace: default
+        name: index
+        state: absent
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 30
+
     - name: "Start index image in kind cluster via '{{ kind_verify_index_image_local }}'"
       kubernetes.core.k8s:
         state: present
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 30
         definition:
           apiVersion: v1
           kind: Pod
