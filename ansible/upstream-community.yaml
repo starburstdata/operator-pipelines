@@ -20,7 +20,7 @@
     - name: "Install prerequisite"
       include_role:
         name: install_prerequisite
-      when: install_prerequisite is undefined or install_prerequisite|bool
+      when: prerequisite is undefined or prerequisite|bool
       tags:
         - clean
         - install
@@ -29,7 +29,7 @@
     - name: "Install kind cluster"
       include_role:
         name: install_kind_cluster
-      when: install_kind_cluster is undefined or install_kind_cluster|bool
+      when: kind_cluster is undefined or kind_cluster|bool
       tags:
         - clean
         - install
@@ -39,4 +39,5 @@
       include_role:
         name: install_kind_cluster
       tags:
+        - never
         - kind_delete
