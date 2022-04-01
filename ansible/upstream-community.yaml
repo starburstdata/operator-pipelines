@@ -18,9 +18,9 @@
     - { role: base, tags: [always] }
 
   tasks:
-    - name: "Install prerequisite"
+    - name: "Install prerequisites"
       include_role:
-        name: install_prerequisite
+        name: install-prerequisites
       when: prerequisites is defined or prerequisites|bool
       tags:
         - clean
@@ -29,7 +29,7 @@
 
     - name: "Install kind cluster"
       include_role:
-        name: install_kind_cluster
+        name: install-kind-cluster
       when: kind_cluster is undefined or kind_cluster|bool
       tags:
         - clean

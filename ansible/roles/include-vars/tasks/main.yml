@@ -8,7 +8,7 @@
 
   when: not var_remote_src|bool
 
-- name: "Using 'include_vars' via 'var_remote_src=true'"
+- name: "Using 'include-vars' via 'var_remote_src=true'"
   block:
     - name: "Check if '{{ var_file }}' var_file exists"
       ansible.builtin.stat:
