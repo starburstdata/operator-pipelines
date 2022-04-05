@@ -9,6 +9,8 @@ spec:
     - name: enabled
       default: "true"
     - name: pipeline_image
+    - name: digest_pinning_tool_image
+      default: "quay.io/redhat-isv/digest-pinning-tool@sha256:21cb7af396031d03b601d65e5600acdbd71dfe46a11dedd55b9a2abc507c6bee"
   results:
     - name: dirty_flag
     - name: related_images_flag
@@ -38,7 +40,7 @@ spec:
             > "$REGISTRY_AUTH_FILE"
         fi
     - name: pin-digest
-      image: quay.io/redhat-isv/digest-pinning-tool@sha256:42cb3b1b668b19ea656679a5d53b46ecf1ed14f42c48cc721ebdf72594ef3447
+      image: "$(params.digest_pinning_tool_image)"
       workingDir: $(workspaces.source.path)
       script: |
         #! /usr/bin/env bash

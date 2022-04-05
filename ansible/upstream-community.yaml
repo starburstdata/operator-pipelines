@@ -21,7 +21,7 @@
     - name: "Install prerequisites"
       include_role:
         name: install-prerequisites
-      when: prerequisites is defined or prerequisites|bool
+      when: prerequisites is undefined or prerequisites|bool
       tags:
         - clean
         - install
@@ -46,7 +46,7 @@
 
     - name: "Delete kind cluster"
       include_role:
-        name: install_kind_cluster
+        name: install-kind-cluster
       tags:
         - never
         - kind_delete

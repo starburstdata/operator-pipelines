@@ -1,0 +1,129 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: operator-ci-pipeline-community
+spec:
+  params:
+    - name: git_repo_url
+      default: https://github.com/k8s-operatorhub/community-operators
+    - name: git_branch
+      description: git branch name
+      default: main
+    - name: git_username
+      default: "digestPinning"
+    - name: git_email
+      default: "no-reply@redhat.com"
+    - name: upstream_repo_name
+      default: ""
+      description: Upstream repository where the pull request will be opened (namespace/name)
+    - name: bundle_path
+      default: operators/cockroachdb/5.0.4
+    - name: pipeline_image
+      description: An image of operator-pipeline-images.
+      default: "quay.io/redhat-isv/operator-pipelines-images:released"
+    - name: pipelines_git_init
+      default: quay.io/operator_testing/pipelines-git-init-rhel8@sha256:1823148105cd1856c829091a55d9dcd95587644719a922f516155e233432e34e
+    - name: pin_digests
+      description: Set to "true" to automatically generate the relatedImages
+        section of the ClusterServiceVersion for you. If changes are made, the
+        result will be committed to GitHub.
+      default: "false"
+  workspaces:
+    - name: pipeline
+    - name: ssh-dir
+      optional: true
+    - name: registry-credentials
+      optional: true
+  tasks:
+    - name: checkout
+      runAfter:
+      taskRef:
+        name: git-clone
+        kind: Task
+      params:
+        - name: url
+          value: $(params.git_repo_url)
+        - name: revision
+          value: $(params.git_branch)
+        - name: gitInitImage
+          value: $(params.pipelines_git_init)
+      workspaces:
+        - name: output
+          workspace: pipeline
+          subPath: src
+        - name: ssh-directory
+          workspace: ssh-dir
+
+    # Verify the bundle path exists
+    - name: bundle-path-validation
+      runAfter:
+        - checkout
+      taskRef:
+        name: bundle-path-validation
+      params:
+        - name: pipeline_image
+          value: "$(params.pipeline_image)"
+        - name: bundle_path
+          value: "$(params.bundle_path)"
+      workspaces:
+        - name: source
+          workspace: pipeline
+          subPath: src
+
+    - name: digest-pinning
+      runAfter:
+        - bundle-path-validation
+      taskRef:
+        name: digest-pinning
+      params:
+        - name: bundle_path
+          value: "$(params.bundle_path)"
+        - name: enabled
+          value: "$(params.pin_digests)"
+        - name: pipeline_image
+          value: "$(params.pipeline_image)"
+      workspaces:
+        - name: source
+          workspace: pipeline
+          subPath: src
+        - name: registry-credentials
+          workspace: registry-credentials
+
+    - name: commit-pinned-digest
+      runAfter:
+        - digest-pinning
+      taskRef:
+        name: commit-pinned-digest
+      params:
+        - name: git_branch
+          value: "$(params.git_branch)"
+        - name: git_user_name
+          value: "$(params.git_username)"
+        - name: git_user_email
+          value: "$(params.git_email)"
+        - name: dirty_flag
+          value: "$(tasks.digest-pinning.results.dirty_flag)"
+        - name: pipeline_git_init_image
+          value: "$(params.pipelines_git_init)"
+      workspaces:
+        - name: source
+          workspace: pipeline
+          subPath: src
+        - name: ssh-directory
+          workspace: ssh-dir
+
+    - name: yaml-lint
+      runAfter:
+        - commit-pinned-digest
+      taskRef:
+        name: yaml-lint
+      params:
+        - name: pipeline_image
+          value: "$(params.pipeline_image)"
+        - name: args
+          value: ["-d {extends: default, rules: {line-length: {max: 180, level: warning}, indentation: {indent-sequences: whatever}}}", "$(params.bundle_path)"]
+      workspaces:
+        - name: shared-workspace
+          workspace: pipeline
+          subPath: src
