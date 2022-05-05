@@ -100,6 +100,10 @@ spec:
         #! /usr/bin/env bash
         set -xe
 
+        # Copy docker login config to default dir, to work around
+        # a "unauthorized to access repository" error.
+        cp $PFLT_DOCKERCONFIG /root/.docker/config.json
+        
         preflight check operator $(params.bundle_image)
 
         mv $PFLT_ARTIFACTS/results.json results.json
